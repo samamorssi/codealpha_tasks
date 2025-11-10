@@ -16,12 +16,10 @@ def init_db():
 
 init_db()
 
-# 3️⃣ Helper function
 def generate_short_code(length=6):
     chars = string.ascii_letters + string.digits
     return ''.join(random.choice(chars) for _ in range(length))
 
-# 4️⃣ Routes
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -49,7 +47,6 @@ def redirect_to_url(short_code):
     conn = sqlite3.connect('urls.db')
     c = conn.cursor()
 
-    # 1️⃣ Get long URL
     c.execute("SELECT long_url, visits FROM urls WHERE short_code=?", (short_code,))
     row = c.fetchone()
 
@@ -59,13 +56,11 @@ def redirect_to_url(short_code):
 
     long_url, visits = row
 
-    # 2️⃣ Increment visit count
     new_visits = visits + 1
     c.execute("UPDATE urls SET visits=? WHERE short_code=?", (new_visits, short_code))
     conn.commit()
     conn.close()
 
-    # 3️⃣ Redirect user
     return redirect(long_url)
 @app.route('/stats/<short_code>')
 def get_stats(short_code):
@@ -103,9 +98,5 @@ def get_all_links():
         })
     return jsonify(links)
 
-
-
-
-# 5️⃣ Run the app
 if __name__ == '__main__':
     app.run(debug=True)
