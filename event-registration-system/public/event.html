@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Details</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    form { margin-top: 20px; }
+    input, button { padding: 8px; margin: 5px 0; display: block; }
+  </style>
+</head>
+<body>
+  <div id="eventDetails"></div>
+
+  <h3>Register for this event</h3>
+  <form id="registerForm">
+    <input type="text" id="userName" placeholder="Your Name" required />
+    <input type="email" id="userEmail" placeholder="Your Email" required />
+    <button type="submit">Register</button>
+  </form>
+
+  <a href="index.html">⬅ Back to events</a>
+
+  <script src="script.js"></script>
+  <script>
+    loadEventDetails();
+  </script>
+</body>
+</html>
