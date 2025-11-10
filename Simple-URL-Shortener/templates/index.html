@@ -62,7 +62,7 @@
       const data = await res.json();
       document.getElementById('result').innerHTML = 
         data.short_url ? `Short URL: <a href="${data.short_url}" target="_blank">${data.short_url}</a>` : 'Error';
-      loadLinks(); // refresh table
+      loadLinks(); 
     }
 
     async function loadLinks() {
@@ -81,7 +81,6 @@
       });
     }
 
-    // Load existing links when page opens
     loadLinks();
   </script>
 </body>
