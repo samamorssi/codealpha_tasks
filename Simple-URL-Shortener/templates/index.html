@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple URL Shortener</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #fafafa;
+    }
+    input {
+      padding: 8px;
+      width: 300px;
+    }
+    button {
+      padding: 8px 12px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    table {
+      margin-top: 30px;
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 600px;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h2>Simple URL Shortener</h2>
+  <input type="text" id="urlInput" placeholder="Enter long URL">
+  <button onclick="shorten()">Shorten</button>
+  <p id="result"></p>
+
+  <h3>My Links</h3>
+  <table id="linksTable">
+    <thead>
+      <tr>
+        <th>Short URL</th>
+        <th>Original URL</th>
+        <th>Visits</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function shorten() {
+      const url = document.getElementById('urlInput').value;
+      const res = await fetch('/shorten', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({url})
+      });
+      const data = await res.json();
+      document.getElementById('result').innerHTML = 
+        data.short_url ? `Short URL: <a href="${data.short_url}" target="_blank">${data.short_url}</a>` : 'Error';
+      loadLinks(); // refresh table
+    }
+
+    async function loadLinks() {
+      const res = await fetch('/all');
+      const links = await res.json();
+      const tbody = document.querySelector('#linksTable tbody');
+      tbody.innerHTML = '';
+      links.forEach(link => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><a href="${link.short_url}" target="_blank">${link.short_url}</a></td>
+          <td><a href="${link.long_url}" target="_blank">${link.long_url}</a></td>
+          <td>${link.visits}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Load existing links when page opens
+    loadLinks();
+  </script>
+</body>
+</html>
